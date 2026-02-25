@@ -1,1 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeshua Arroz con Leche</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --color-dulce: #6b4e3d; --color-crema: #fdfaf6; --color-acento: #ff9a9e; }
+        body {
+            background-color: var(--color-crema);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .bg-arroz {
+            background-image: url('https://www.transparenttextures.com/patterns/cream-pixels.png');
+        }
+        .sombra-suave { box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        #bloqueo-sub {
+            display: none; position: fixed; inset: 0; background: white; 
+            z-index: 9999; justify-content: center; align-items: center; 
+            text-align: center; padding: 20px;
+        }
+    </style>
+</head>
+<body class="p-4 pb-12 max-w-md mx-auto bg-arroz">
 
+    <div id="bloqueo-sub">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800 uppercase">Suscripción Pendiente</h1>
+            <p class="text-gray-500 text-sm mt-2">Contacte al equipo de Vibras Positivas.</p>
+            <a href="https://wa.me/573007293667" class="mt-6 inline-block bg-pink-400 text-white px-6 py-2 rounded-full font-bold">SOPORTE</a>
+        </div>
+    </div>
+
+    <header class="text-center mb-8">
+        <img src="yeshua.png" alt="Yeshua Logo" class="h-40 w-40 mx-auto drop-shadow-lg mb-4 object-contain">
+        <h1 class="text-3xl font-serif font-black text-[#6b4e3d]">Yeshua</h1>
+        <p class="text-pink-400 font-bold text-xs uppercase tracking-[0.2em]">Arroz con Leche Casero</p>
+        
+        <div class="mt-4">
+            <a href="yeshua.pdf" target="_blank" class="inline-flex items-center gap-2 bg-white text-[#6b4e3d] border-2 border-[#6b4e3d] px-4 py-2 rounded-full text-xs font-bold hover:bg-[#6b4e3d] hover:text-white transition-all">
+                <i class="fas fa-book-open"></i> VER CATÁLOGO PDF
+            </a>
+        </div>
+    </header>
+
+    <section class="bg-white p-6 rounded-[2rem] sombra-suave border-2 border-pink-100 mb-6 text-center">
+        <div class="w-full h-48 bg-gray-100 rounded-2xl mb-4 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?q=80&w=1000&auto=format&fit=crop" alt="Arroz con leche" class="w-full h-full object-cover">
+        </div>
+        <h3 class="text-xl font-bold text-gray-800">Porción Especial Yeshua</h3>
+        <p class="text-gray-400 text-[10px] mb-4 uppercase font-bold tracking-wider">Precio: $10.000</p>
+        
+        <div class="flex flex-col items-center gap-4">
+            <div class="flex items-center gap-6">
+                <button onclick="cambiarCantidad(-1)" class="w-10 h-10 rounded-full bg-pink-100 text-pink-600 font-black text-xl flex items-center justify-center">-</button>
+                <span id="cantidad" class="text-3xl font-black text-gray-800">1</span>
+                <button onclick="cambiarCantidad(1)" class="w-10 h-10 rounded-full bg-pink-100 text-pink-600 font-black text-xl flex items-center justify-center">+</button>
+            </div>
+
+            <div class="w-full mt-2">
+                <label class="text-[10px] font-black text-gray-400 uppercase mb-1 block tracking-widest">Elige tu adición gratis</label>
+                <select id="adicion" class="w-full p-3 bg-pink-50 border-2 border-pink-100 rounded-xl text-sm font-bold text-[#6b4e3d] outline-none">
+                    <option value="Sin adición">Sin adición</option>
+                    <option value="Queso">Queso 🧀</option>
+                    <option value="Uvas Pasas">Uvas Pasas 🍇</option>
+                    <option value="Arequipe">Arequipe 🍮</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white p-6 rounded-[2rem] sombra-suave mb-6">
+        <div id="vista-resumen-cliente" class="hidden mb-4">
+            <div class="flex justify-between items-center bg-pink-50 p-4 rounded-2xl">
+                <div class="text-sm">
+                    <p class="font-bold text-gray-800" id="res-nombre"></p>
+                    <p class="text-gray-500 text-xs" id="res-dir"></p>
+                </div>
+                <button onclick="toggleEditor()" class="text-pink-500 font-bold text-xs underline">Editar Datos</button>
+            </div>
+        </div>
+
+        <div id="editor-cliente" class="space-y-3">
+            <h2 class="text-xs font-black uppercase text-gray-400 tracking-wider mb-2 italic">Información de Entrega</h2>
+            <input type="text" id="nombre" placeholder="¿A nombre de quién?" class="w-full p-3 bg-gray-50 rounded-xl border-none outline-none text-sm font-medium">
+            <input type="text" id="direccion" placeholder="Dirección exacta" class="w-full p-3 bg-gray-50 rounded-xl border-none outline-none text-sm font-medium">
+            <input type="tel" id="celular" placeholder="Número de celular" class="w-full p-3 bg-gray-50 rounded-xl border-none outline-none text-sm font-medium">
+            
+            <select id="forma_pago" class="w-full p-3 bg-gray-50 rounded-xl text-sm font-medium outline-none">
+                <option value="Efectivo">Pago en Efectivo</option>
+                <option value="Transferencia (Nequi/Daviplata)">Transferencia</option>
+            </select>
+
+            <textarea id="observaciones" placeholder="¿Alguna instrucción adicional para el motorizado?" class="w-full p-3 bg-gray-50 rounded-xl border-none outline-none text-sm h-20"></textarea>
+            
+            <button onclick="guardarDatos()" class="w-full bg-[#6b4e3d] text-white py-3 rounded-xl font-bold text-sm shadow-md">Confirmar Datos</button>
+        </div>
+    </section>
+
+    <button onclick="enviarWhatsApp()" class="w-full bg-[#25D366] text-white p-5 rounded-[2rem] font-black text-lg flex items-center justify-center gap-3 shadow-xl hover:scale-105 active:scale-95 transition-all">
+        <i class="fab fa-whatsapp text-2xl"></i> PEDIR POR WHATSAPP
+    </button>
+
+    <footer class="text-center mt-10">
+        <p class="text-[10px] font-bold text-gray-400 uppercase leading-relaxed">
+            YESHUA ARROZ CON LECHE <br>
+            Parque Colinas del Portal (Al lado de la subestación) <br>
+            Contacto: 323 301 0421
+        </p>
+        <p class="text-[10px] font-black text-pink-300 uppercase tracking-widest mt-6">app desarrollada por vibras positivas derechos de autor</p>
+    </footer>
+
+    <script>
+        const fechaCorte = new Date('2026-12-31');
+        if (new Date() > fechaCorte) {
+            document.getElementById('bloqueo-sub').style.display = 'flex';
+        }
+
+        let cantidad = 1;
+        const precioUnitario = 10000;
+
+        function cambiarCantidad(valor) {
+            cantidad += valor;
+            if (cantidad < 1) cantidad = 1;
+            document.getElementById('cantidad').innerText = cantidad;
+        }
+
+        window.onload = function() {
+            if(localStorage.getItem('y_nombre')) {
+                document.getElementById('nombre').value = localStorage.getItem('y_nombre');
+                document.getElementById('direccion').value = localStorage.getItem('y_direccion');
+                document.getElementById('celular').value = localStorage.getItem('y_celular');
+                mostrarResumen();
+            }
+        };
+
+        function guardarDatos() {
+            const n = document.getElementById('nombre').value;
+            const d = document.getElementById('direccion').value;
+            if(!n || !d) return alert("Por favor completa tu nombre y dirección.");
+            localStorage.setItem('y_nombre', n);
+            localStorage.setItem('y_direccion', d);
+            localStorage.setItem('y_celular', document.getElementById('celular').value);
+            mostrarResumen();
+        }
+
+        function mostrarResumen() {
+            document.getElementById('res-nombre').innerText = document.getElementById('nombre').value;
+            document.getElementById('res-dir').innerText = document.getElementById('direccion').value;
+            document.getElementById('editor-cliente').classList.add('hidden');
+            document.getElementById('vista-resumen-cliente').classList.remove('hidden');
+        }
+
+        function toggleEditor() {
+            document.getElementById('editor-cliente').classList.remove('hidden');
+            document.getElementById('vista-resumen-cliente').classList.add('hidden');
+        }
+
+        function enviarWhatsApp() {
+            const nom = document.getElementById('nombre').value;
+            const dir = document.getElementById('direccion').value;
+            const cel = document.getElementById('celular').value;
+            const pago = document.getElementById('forma_pago').value;
+            const obs = document.getElementById('observaciones').value;
+            const adi = document.getElementById('adicion').value;
+            const total = cantidad * precioUnitario;
+
+            if(!nom || !dir) return alert("Faltan datos de entrega.");
+
+            let msg = `*🍰 FACTURA YESHUA ARROZ CON LECHE*\n`;
+            msg += `----------------------------------\n`;
+            msg += `👤 *Cliente:* ${nom}\n`;
+            msg += `📍 *Dirección:* ${dir}\n`;
+            msg += `📞 *Celular:* ${cel}\n`;
+            msg += `----------------------------------\n`;
+            msg += `✅ *Producto:* Arroz con Leche\n`;
+            msg += `🔢 *Cantidad:* ${cantidad}\n`;
+            msg += `✨ *Adición:* ${adi} (Gratis)\n`;
+            msg += `💰 *Subtotal:* $${total.toLocaleString()}\n`;
+            msg += `----------------------------------\n`;
+            msg += `💵 *Forma de Pago:* ${pago}\n`;
+            if(obs) msg += `📝 *Obs:* ${obs}\n`;
+            msg += `----------------------------------\n`;
+            msg += `🔥 *TOTAL A PAGAR: $${total.toLocaleString()}*\n`;
+            msg += `----------------------------------\n`;
+            msg += `🚀 _App por Vibras Positivas_`;
+
+            window.open(`https://wa.me/573233010421?text=${encodeURIComponent(msg)}`);
+        }
+    </script>
+</body>
+</html>
