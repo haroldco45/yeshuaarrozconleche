@@ -21,6 +21,14 @@
             z-index: 9999; justify-content: center; align-items: center; 
             text-align: center; padding: 20px;
         }
+        .btn-gps-anim {
+            animation: pulse-pink 2s infinite;
+        }
+        @keyframes pulse-pink {
+            0% { box-shadow: 0 0 0 0 rgba(255, 154, 158, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 154, 158, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 154, 158, 0); }
+        }
     </style>
 </head>
 <body class="p-4 pb-12 max-w-md mx-auto bg-arroz">
@@ -89,6 +97,15 @@
 
         <div id="editor-cliente" class="space-y-3">
             <h2 class="text-xs font-black uppercase text-gray-400 tracking-wider mb-2 italic">Información de Entrega</h2>
+            
+            <button onclick="obtenerGPS()" class="w-full btn-gps-anim bg-pink-500 text-white py-3 rounded-xl font-black text-xs uppercase flex items-center justify-center gap-2 shadow-lg mb-2">
+                <i class="fas fa-map-marker-alt"></i> Vincular mi Ubicación GPS
+            </button>
+            <div id="status_gps" class="hidden text-center text-green-600 font-bold text-[10px] uppercase mb-2">
+                <i class="fas fa-check-circle"></i> Ubicación vinculada correctamente
+            </div>
+            <input type="hidden" id="gps_link">
+
             <input type="text" id="nombre" placeholder="¿A nombre de quién?" class="w-full p-3 bg-gray-50 rounded-xl border-none outline-none text-sm font-medium">
             <input type="text" id="direccion" placeholder="Dirección exacta" class="w-full p-3 bg-gray-50 rounded-xl border-none outline-none text-sm font-medium">
             <input type="tel" id="celular" placeholder="Número de celular" class="w-full p-3 bg-gray-50 rounded-xl border-none outline-none text-sm font-medium">
@@ -130,9 +147,22 @@
             cantidad += valor;
             if (cantidad < 1) cantidad = 1;
             document.getElementById('cantidad').innerText = cantidad;
-            // Actualizar el cajón del total
             const total = cantidad * precioUnitario;
             document.getElementById('total-cajon').innerText = total.toLocaleString();
+        }
+
+        // FUNCION GPS
+        function obtenerGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                    document.getElementById('gps_link').value = link;
+                    document.getElementById('status_gps').classList.remove('hidden');
+                    alert("📍 Ubicación vinculada con éxito");
+                }, function(error) {
+                    alert("Error al obtener ubicación. Por favor activa el GPS de tu celular.");
+                });
+            }
         }
 
         window.onload = function() {
@@ -173,6 +203,7 @@
             const pago = document.getElementById('forma_pago').value;
             const obs = document.getElementById('observaciones').value;
             const adi = document.getElementById('adicion').value;
+            const gps = document.getElementById('gps_link').value;
             const total = cantidad * precioUnitario;
 
             if(!nom || !dir) return alert("Faltan datos de entrega.");
@@ -181,6 +212,7 @@
             msg += `----------------------------------\n`;
             msg += `👤 *Cliente:* ${nom}\n`;
             msg += `📍 *Dirección:* ${dir}\n`;
+            if(gps) msg += `📍 *GPS:* ${gps}\n`;
             msg += `📞 *Celular:* ${cel}\n`;
             msg += `----------------------------------\n`;
             msg += `✅ *Producto:* Arroz con Leche\n`;
