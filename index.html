@@ -151,17 +151,23 @@
             document.getElementById('total-cajon').innerText = total.toLocaleString();
         }
 
-        // FUNCION GPS
+        // FUNCION GPS CORREGIDA
         function obtenerGPS() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(pos) {
-                    const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                    // Enlace limpio de Google Maps
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    const link = "https://www.google.com/maps?q=" + lat + "," + lon;
+                    
                     document.getElementById('gps_link').value = link;
                     document.getElementById('status_gps').classList.remove('hidden');
                     alert("📍 Ubicación vinculada con éxito");
                 }, function(error) {
-                    alert("Error al obtener ubicación. Por favor activa el GPS de tu celular.");
-                });
+                    alert("Error: Por favor activa el GPS y permite que el navegador vea tu ubicación.");
+                }, {enableHighAccuracy: true});
+            } else {
+                alert("Tu navegador no soporta GPS.");
             }
         }
 
